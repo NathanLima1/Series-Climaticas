@@ -5,6 +5,10 @@ import folium
 import webbrowser
 import math
 from scipy import stats
+from ratio_weightened import rw
+from optimal_norm_ratio import onr
+from inverse_dist_weightened import idw
+from optimized_idw import  oidw
 
 class Triangulation:
     def __init__(self):
@@ -52,61 +56,9 @@ class Triangulation:
 
     def idw(self, focus):
         """
-        idw = Inverse Distance Weightened
+        Calculate Inverse Distance Weightened
         """
-        todo = {
-            "Precipitação": 1,
-            "Temperatura Máxima": 2,
-            "Temperatura Minima": 3 
-        }
-
-        data_process = DataProcessing()
-
-        distance = self.distance
-        # idw = inverse distance weightened
-        self.idw_x = []
-        self.idw_y = []
-        self.idw_target_y = []
-
-        if focus == 1:
-            index = 6
-            a = 3
-            data = data_process.normalize_data(data_process.load_data_file("Dados comum"))
-        elif focus == 2:
-            index = 7
-            a = 4
-            data = data_process.load_data_file("Dados comum")
-        elif focus == 3:
-            index = 8
-            a = 5
-            data = data_process("Dados comum")
-        
-        cont2 = 1
-
-        self.meta_matrix_idw = []
-        for i in range(len(data)):
-            cont = 0
-            sum = 0
-            for j in range(index, 15, 3):
-                sum += float(data[i][j])/distance[cont]
-                cont += 1
-
-            calculate_idw = round(sum/(1/distance[0] + 1/distance[1] + 1/distance[2]), 4)
-            aux = []
-            aux.append(float(data[i][0]))
-            aux.append(float(data[i][1]))
-            aux.append(float(data[i][2]))
-            aux.append(calculate_idw)
-
-            self.meta_matrix_idw.append(aux) # Matrix for the meta learning
-
-            self.idw_x.append(cont2)
-            self.idw_y.append(float(calculate_idw))
-            self.idw_target_y.append(float(data[i][a]))
-
-            cont2 += 1
-
-        self.idw_abs_error, self.idw_rel_error = self.calculate_errors(self.idw_y, self.idw_target_y)
+        idw(self, focus)
 
     def get_idw(self):
         """
@@ -179,181 +131,13 @@ class Triangulation:
         webbrowser.open_new_tab('map.html')
 
     def oidw(self, focus):
-        """
-        oidw = Optimized Inverse Distance Weightened
-        """
-        num_stations = 4  # Number of stations used
-
-        monthly_target_avg = self.generate_monthly_avg(focus, 'target')
-        monthly_neighborA_avg = self.generate_monthly_avg(focus, 'VizA')
-        monthly_neighborB_avg = self.generate_monthly_avg(focus, 'VizB')
-        monthly_neighborC_avg = self.generate_monthly_avg(focus, 'VizC')
-
-        monthly_data = []
-        for i in range(len(monthly_target_avg)):
-            row = [
-                monthly_target_avg[i],
-                monthly_neighborA_avg[i],
-                monthly_neighborB_avg[i],
-                monthly_neighborC_avg[i]
-            ]
-            monthly_data.append(row)
-
-        if focus == 1:
-            index_start = 6
-        elif focus == 2:
-            index_start = 7
-        elif focus == 3:
-            index_start = 8
-
-        treatment = DataProcessing()
-        raw_data = treatment.load_data_file('Dados comum')
-
-        oidw_results = []
-        weighted_sum = 0
-        denominator_sum = 0
-        month_row_counter = 0
-        neighbor_column_counter = 1
-        station_counter = 0
-
-        for i in range(len(raw_data)):
-            try:
-                if raw_data[i][1] != raw_data[i + 1][1]:
-                    station_counter = 0
-                    neighbor_column_counter = 1
-
-                    for j in range(index_start, 15, 3):
-                        weighted_sum += (
-                            float(raw_data[i][j]) *
-                            monthly_data[month_row_counter][0] *
-                            math.log(self.h[0])
-                        ) / (
-                            self.d[station_counter] +
-                            monthly_data[month_row_counter][neighbor_column_counter] *
-                            math.log(self.h[neighbor_column_counter])
-                        )
-
-                        denominator_sum = 1 / self.d[0] + 1 / self.d[1] + 1 / self.d[2]
-                        station_counter += 1
-                        neighbor_column_counter += 1
-
-                    oidw_results.append(weighted_sum / denominator_sum)
-                    weighted_sum = 0
-                    denominator_sum = 0
-                    month_row_counter += 1
-
-                else:
-                    station_counter = 0
-                    neighbor_column_counter = 1
-
-                    for j in range(index_start, 15, 3):
-                        weighted_sum += (
-                            float(raw_data[i][j]) *
-                            monthly_data[month_row_counter][0] *
-                            math.log(self.h[0])
-                        ) / (
-                            self.d[station_counter] +
-                            monthly_data[month_row_counter][neighbor_column_counter] *
-                            math.log(self.h[neighbor_column_counter])
-                        )
-
-                        denominator_sum = 1 / self.d[0] + 1 / self.d[1] + 1 / self.d[2]
-                        station_counter += 1
-                        neighbor_column_counter += 1
-
-            except IndexError:
-                pass
+        oidw(self, focus)
 
     def rw(self, focus):
         """
-        Residual weightening ou ratio weightened?
+        Calculate ratio weightened
         """
-        num_stations = 3
-        monthly_avg_target = self.generate_monthly_average(focus, 'target')
-        monthly_avg_vizA = self.generate_monthly_average(focus, 'VizA')
-        monthly_avg_vizB = self.generate_monthly_average(focus, 'VizB')
-        monthly_avg_vizC = self.generate_monthly_average(focus, 'VizC')
-
-        if focus == 1:
-            index = 6
-        elif focus == 2:
-            index = 7
-        elif focus == 3:
-            index = 8
-
-        monthly_matrix = []
-        self.idw_x = []
-        self.idw_y = []
-        self.idw_avg_y = []
-
-        for i in range(len(monthly_avg_target)):
-            temp = [
-                monthly_avg_target[i],
-                monthly_avg_vizA[i],
-                monthly_avg_vizB[i],
-                monthly_avg_vizC[i]
-            ]
-            monthly_matrix.append(temp)
-
-        treatment = DataProcessing()
-        data = treatment.load_data_file('Dados comum')
-
-        current_index = 0
-        sum_values = 0
-        result = []
-        ma_row = 0
-
-        for i in range(len(data)):
-            try:
-                if i == self.index_end[current_index]:
-                    sum_values = (
-                        (monthly_matrix[ma_row][0] / monthly_matrix[ma_row][1]) * float(data[i][index]) +
-                        (monthly_matrix[ma_row][0] / monthly_matrix[ma_row][2]) * float(data[i][index + 3]) +
-                        (monthly_matrix[ma_row][0] / monthly_matrix[ma_row][3]) * float(data[i][index + 6])
-                    ) * (1 / 3)
-                    result.append(sum_values)
-                    sum_values = 0
-                    ma_row += 1
-                    current_index += 1
-                else:
-                    sum_values = (
-                        (monthly_matrix[ma_row][0] / monthly_matrix[ma_row][1]) * float(data[i][index]) +
-                        (monthly_matrix[ma_row][0] / monthly_matrix[ma_row][2]) * float(data[i][index + 3]) +
-                        (monthly_matrix[ma_row][0] / monthly_matrix[ma_row][3]) * float(data[i][index + 6])
-                    ) * (1 / 3)
-                    result.append(sum_values)
-                    sum_values = 0
-            except IndexError:
-                sum_values = (
-                    (monthly_matrix[ma_row - 1][0] / monthly_matrix[ma_row - 1][1]) * float(data[i][index]) +
-                    (monthly_matrix[ma_row - 1][0] / monthly_matrix[ma_row - 1][2]) * float(data[i][index + 3]) +
-                    (monthly_matrix[ma_row - 1][0] / monthly_matrix[ma_row - 1][3]) * float(data[i][index + 6])
-                ) * (1 / 3)
-                result.append(sum_values)
-                sum_values = 0
-
-        self.rw_x = []
-        self.rw_y = []
-        self.rw_avg_y = []
-        self.meta_matrix_rw = []
-
-        x = 0
-        for i in range(len(data)):
-            self.rw_x.append(x)
-            self.rw_y.append(result[i])
-            self.rw_avg_y.append(float(data[i][index - 3]))
-
-            temp = [
-                float(data[i][0]),
-                float(data[i][1]),
-                float(data[i][2]),
-                float(result[i])
-            ]
-            self.meta_matrix_rw.append(temp)
-
-            x += 1
-
-        self.rw_abs_error, self.rw_rel_error = self.calculate_errors(self.rw_y, self.rw_avg_y)
+        rw(self, focus)
 
     def get_rw(self):
         return self.rw_x, self.rw_y, self.rw_avg_y, self.rw_abs_error, self.rw_rel_error, self.meta_matrix_rw
@@ -408,8 +192,6 @@ class Triangulation:
             elif foco == 3:
                 index = 14
                 data = treatment.load_data_file('Dados comum')
-
-        
 
         #encontar o index da ultima data de cada mes
         for i in range(len(data)):
@@ -508,109 +290,9 @@ class Triangulation:
 
     def onr(self, focus):
         """
-        Optimal normalizate ratio?
+        Calculate Optimized Normal Ratio
         """
-        treatment = DataProcessing()
-        data = treatment.load_data_file('Dados comum')
-
-        days, coef_a, coef_b, coef_c = self.generate_correlation_coef(focus)
-
-        if focus == 1:
-            target_index = 6
-        elif focus == 2:
-            target_index = 7
-        elif focus == 3:
-            target_index = 8
-        else:
-            raise ValueError("Invalid focus value. Must be 1, 2, or 3.")
-
-        self.onr_y = []
-        result = []
-        correlation_counter = 0
-
-        for i in range(len(data)):
-            try:
-                if data[i][1] != data[i + 1][1]:
-                    numerator = (
-                        math.pow(coef_a[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_a[correlation_counter]))) * float(data[i][target_index]) +
-                        math.pow(coef_b[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_b[correlation_counter]))) * float(data[i][target_index + 3]) +
-                        math.pow(coef_c[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_c[correlation_counter]))) * float(data[i][target_index + 6])
-                    )
-
-                    denominator = (
-                        math.pow(coef_a[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_a[correlation_counter]))) +
-                        math.pow(coef_b[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_b[correlation_counter]))) +
-                        math.pow(coef_c[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_c[correlation_counter])))
-                    )
-
-                    result.append(numerator / denominator)
-                    correlation_counter += 1
-
-                else:
-                    numerator = (
-                        math.pow(coef_a[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_a[correlation_counter]))) * float(data[i][target_index]) +
-                        math.pow(coef_b[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_b[correlation_counter]))) * float(data[i][target_index + 3]) +
-                        math.pow(coef_c[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_c[correlation_counter]))) * float(data[i][target_index + 6])
-                    )
-
-                    denominator = (
-                        math.pow(coef_a[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_a[correlation_counter]))) +
-                        math.pow(coef_b[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_b[correlation_counter]))) +
-                        math.pow(coef_c[correlation_counter], 2 * ((days[correlation_counter] - 2) / (1 - coef_c[correlation_counter])))
-                    )
-
-                    result.append(numerator / denominator)
-
-            except IndexError:
-                last = correlation_counter - 1
-                numerator = (
-                    math.pow(coef_a[last], 2 * ((days[last] - 2) / (1 - coef_a[last]))) * float(data[i][target_index]) +
-                    math.pow(coef_b[last], 2 * ((days[last] - 2) / (1 - coef_b[last]))) * float(data[i][target_index + 3]) +
-                    math.pow(coef_c[last], 2 * ((days[last] - 2) / (1 - coef_c[last]))) * float(data[i][target_index + 6])
-                )
-
-                denominator = (
-                    math.pow(coef_a[last], 2 * ((days[last] - 2) / (1 - coef_a[last]))) +
-                    math.pow(coef_b[last], 2 * ((days[last] - 2) / (1 - coef_b[last]))) +
-                    math.pow(coef_c[last], 2 * ((days[last] - 2) / (1 - coef_c[last])))
-                )
-
-                result.append(numerator / denominator)
-
-            except ValueError:
-                last = correlation_counter - 1
-                numerator = (
-                    math.pow(coef_a[last], 2 * ((days[last] - 2) / (1 - coef_a[last]))) * float(data[i][target_index]) +
-                    math.pow(coef_b[last], 2 * ((days[last] - 2) / (1 - coef_b[last]))) * float(data[i][target_index + 3]) +
-                    math.pow(coef_c[last], 2 * ((days[last] - 2) / (1 - coef_c[last]))) * float(data[i][target_index + 6])
-                )
-
-                denominator = (
-                    math.pow(coef_a[last], 2 * ((days[last] - 2) / (1 - coef_a[last]))) +
-                    math.pow(coef_b[last], 2 * ((days[last] - 2) / (1 - coef_b[last]))) +
-                    math.pow(coef_c[last], 2 * ((days[last] - 2) / (1 - coef_c[last])))
-                )
-
-                result.append(numerator / denominator)
-
-        self.onr_x = []
-        self.onr_alv_y = []
-        self.meta_matrix_onr = []
-
-        for index in range(len(data)):
-            self.onr_x.append(index)
-            self.onr_alv_y.append(float(data[index][target_index - 3]))
-            self.onr_y.append(result[index])
-
-            row = [
-                float(data[index][0]),
-                float(data[index][1]),
-                float(data[index][2]),
-                float(self.onr_y[index])
-            ]
-            self.meta_matrix_onr.append(row)
-
-        self.onr_erro_abs, self.onr_erro_rel = self.calcula_erros(self.onr_y, self.onr_alv_y)
+        onr(self, focus)
 
     def get_onr(self):
         return self.onr_x, self.onr_y, self.onr_alv_y, self.onr_erro_abs, self.onr_erro_rel, self.meta_matrix_onr

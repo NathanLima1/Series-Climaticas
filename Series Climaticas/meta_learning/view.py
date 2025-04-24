@@ -43,8 +43,6 @@ class View:
         prev = Training()
         salvar_m = self.save_model.get()
         
-
-
         #cidade = self.get_end(self.data_s.get())
         cidade = self.data_s.get()
         indicator = self.ind_s.get()

@@ -4,6 +4,10 @@ from triangulation.triangulation import Triangulation
 from math import floor
 import pyscreenshot
 import os
+from sklearn import tree
+from sklearn.neural_network import MLPRegressor
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.svm import SVR
 from view import View
 from gen_param import generate_param
 from customized_meta_l import customized_meta_learning
@@ -271,14 +275,23 @@ class MetaLearning:
         v.generate_preview_dt(self)
     
     def generate_preview_nn(self):
+        """
+        Generates a preview of the model Nearest Neighbors
+        """
         v = View()
         v.generate_preview_nn(self)
     
     def generate_preview_svm(self):
+        """
+        Generates a preview of the model Support Vector Machine
+        """
         v = View()
         v.generate_preview_svm(self)
     
     def generate_preview_Kn(self):
+        """
+        Generates a preview o K Neighbors
+        """
         v = View()
         v.generate_preview_Kn
 
