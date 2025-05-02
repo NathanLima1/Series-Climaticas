@@ -1,0 +1,7 @@
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/target_clean.txt
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/neighborA_clean.txt
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/neighborB_clean.txt
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/neighborC_clean.txt
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/common_data.csv
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/buff.txt
+/home/nathan/Desktop/Facul/IC/Series-Climaticas/Series Climaticas/Coordinates.txt

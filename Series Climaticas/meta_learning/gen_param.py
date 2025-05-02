@@ -72,8 +72,8 @@ def generate_param(self):
         self.lbf_d = LabelFrame(self, text='Dados', width=600, height=170, font='Arial 12 bold', fg ='white', bg=fundo).place(x=20, y=500)
 
         self.data_s = StringVar()
-        self.data_s.set('Cidade alvo')
-        lista_dt = ['Cidade alvo', 'Vizinha A', 'Vizinha B', 'Vizinha C']
+        self.data_s.set('Target city')
+        lista_dt = ['Target city', 'Neighbor A', 'Neighbor B', 'Neighbor C']
         Label(self, text="Dados para treinamento:", font='Arial 12 bold', fg='white', bg=fundo).place(x=50, y=520)
         self.combo_c = ttk.Combobox(self, values=lista_dt, textvariable=self.data_s, width=25, font='Arial 12', justify=CENTER, state='readonly').place(x=50, y=545)
 
@@ -211,8 +211,8 @@ def generate_param(self):
         self.lbf_dt_nn = LabelFrame(self, text='Dados', width=600, height=170, font='Arial 12 bold', fg ='white', bg=fundo).place(x=20, y=730)
 
         self.data_s = StringVar()
-        self.data_s.set('Cidade alvo')
-        lista_dt = ['Cidade alvo', 'Vizinha A', 'Vizinha B', 'Vizinha C']
+        self.data_s.set('Target city')
+        lista_dt = ['Target city', 'Neighbor A', 'Neighbor B', 'Neighbor C']
         Label(self, text="Dados para treinamento:", font='Arial 12 bold', fg='white', bg=fundo).place(x=50, y=750)
         self.combo_c = ttk.Combobox(self, values=lista_dt, textvariable=self.data_s, width=25, font='Arial 12', justify=CENTER, state='readonly').place(x=50, y=775)
 
@@ -272,8 +272,8 @@ def generate_param(self):
         self.lbf_d = LabelFrame(self, text='Dados', width=600, height=170, font='Arial 12 bold', fg ='white', bg=fundo).place(x=20, y=320)
 
         self.data_s = StringVar()
-        self.data_s.set('Cidade alvo')
-        lista_dt = ['Cidade alvo', 'Vizinha A', 'Vizinha B', 'Vizinha C']
+        self.data_s.set('Target city')
+        lista_dt = ['Target city', 'Neighbor A', 'Neighbor B', 'Neighbor C']
         Label(self, text="Dados para treinamento:", font='Arial 12 bold', fg='white', bg=fundo).place(x=50, y=340)
         self.combo_c = ttk.Combobox(self, values=lista_dt, textvariable=self.data_s, width=25, font='Arial 12', justify=CENTER, state='readonly').place(x=50, y=365)
 
@@ -360,8 +360,8 @@ def generate_param(self):
         self.lbf_dt_nn = LabelFrame(self, text='Dados', width=600, height=170, font='Arial 12 bold', fg ='white', bg=fundo).place(x=20, y=500)
 
         self.data_s = StringVar()
-        self.data_s.set('Cidade alvo')
-        lista_dt = ['Cidade alvo', 'Vizinha A', 'Vizinha B', 'Vizinha C']
+        self.data_s.set('Target city')
+        lista_dt = ['Target city', 'Neighbor A', 'Neighbor B', 'Neighbor C']
         Label(self, text="Dados para treinamento:", font='Arial 12 bold', fg='white', bg=fundo).place(x=50, y=520)
         self.combo_c = ttk.Combobox(self, values=lista_dt, textvariable=self.data_s, width=25, font='Arial 12', justify=CENTER, state='readonly').place(x=50, y=545)
 
@@ -418,8 +418,8 @@ def generate_param(self):
         self.lbf_dt_nn = LabelFrame(self, text='Dados', width=600, height=170, font='Arial 12 bold', fg ='white', bg=fundo).place(x=20, y=320)
 
         self.data_s = StringVar()
-        self.data_s.set('Cidade alvo')
-        lista_dt = ['Cidade alvo', 'Vizinha A', 'Vizinha B', 'Vizinha C']
+        self.data_s.set('Target city')
+        lista_dt = ['Target city', 'Neighbor A', 'Neighbor B', 'Neighbor C']
         Label(self, text="Dados para treinamento:", font='Arial 12 bold', fg='white', bg=fundo).place(x=50, y=340)
         self.combo_c = ttk.Combobox(self, values=lista_dt, textvariable=self.data_s, width=25, font='Arial 12', justify=CENTER, state='readonly').place(x=50, y=365)
 

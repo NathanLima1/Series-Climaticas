@@ -6,7 +6,6 @@ class DataProcessing:
     global neighborB
     global neighborC
     global download_path
-
     target = neighborA = neighborB = neighborC = download_path = ''
 
     def __init__(self):
@@ -109,7 +108,7 @@ class DataProcessing:
             counter += 1
 
         self.get_coordinates()
-        self.common_data_v2()
+        self.common_data_2()
 
     def common_data(self):
         # dadosc
@@ -256,10 +255,10 @@ class DataProcessing:
             paths = [line.strip() for line in file]
 
         options = {
-            'Cidade alvo': 0,
-            'Vizinha A': 1,
-            'Vizinha B': 2,
-            'Vizinha C': 3,
+            'Target city': 0,
+            'Neighbor A': 1,
+            'Neighbor B': 2,
+            'Neighbor C': 3,
             'Dados comum': 4
         }
 
@@ -291,10 +290,10 @@ class DataProcessing:
             paths = [line.strip() for line in file]
 
         options = {
-            'Cidade alvo': 0,
-            'Vizinha A': 1,
-            'Vizinha B': 2,
-            'Vizinha C': 3,
+            'Target city': 0,
+            'Neighbor A': 1,
+            'Neighbor B': 2,
+            'Neighbor C': 3,
             'Dados comum': 4
         }
 
@@ -430,9 +429,9 @@ class DataProcessing:
 
         if option == 'Cidade alvo':
             return lines[0].replace("\n", '')
-        elif option == 'Vizinha A':
+        elif option == 'Neighbor A':
             return lines[1].replace("\n", '')
-        elif option == 'Vizinha B':
+        elif option == 'Neighbor B':
             return lines[2].replace("\n", '')
-        elif option == 'Vizinha C':
+        elif option == 'Neighbor C':
             return lines[3].replace("\n", '')

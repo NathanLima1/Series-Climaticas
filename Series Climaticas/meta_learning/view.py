@@ -3,6 +3,11 @@ from tkinter import Canvas, Label, LabelFrame, StringVar, IntVar, BooleanVar, En
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
+fundo = '#4F4F4F' #? Cor de fundo da tela
+fun_b = '#3CB371' #? Cor de fundo dos botoes
+fun_ap = '#9C444C'
+fun_alt = '#C99418'
+fun_meta_le = '#191970'
 
 class View:
     def data_preview(self, pts, media_ea, media_er, maior_ea, exat_maior, pre_maior, menor_ea, exat_menor, pre_menor, eixo_y_exato, eixo_y_predict, eixo_x):

@@ -1,7 +1,7 @@
-from neural_network_tr import neural_network
-from k_neighbors_tr import KNeighbors
-from support_vector_tr import support_vector_regression
-from decision_tree_tr import decision_tree
+from training.neural_network_tr import neural_network
+from training.k_neighbors_tr import KNeighbors
+from training.support_vector_tr import support_vector_regression
+from training.decision_tree_tr import decision_tree
 from math import floor
 from data_processing.data_processing import DataProcessing
 
@@ -266,11 +266,11 @@ class Training:
         Returns:
             int: The focus column index.
         """
-        if city == 'Cidade alvo':
+        if city == 'Target city':
             return indicator
-        elif city == 'Vizinha A':
+        elif city == 'Neighbor A':
             return 3 + indicator
-        elif city == 'Vizinha B':
+        elif city == 'Neighbor B':
             return 6 + indicator
         else:
             return 9 + indicator

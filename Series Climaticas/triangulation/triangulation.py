@@ -5,10 +5,10 @@ import folium
 import webbrowser
 import math
 from scipy import stats
-from ratio_weightened import rw
-from optimal_norm_ratio import onr
-from inverse_dist_weightened import idw
-from optimized_idw import  oidw
+from triangulation.ratio_weightened import rw
+from triangulation.optimal_norm_ratio import onr
+from triangulation.inverse_dist_weightened import idw
+from triangulation.optimized_idw import  oidw
 
 class Triangulation:
     def __init__(self):
@@ -92,7 +92,7 @@ class Triangulation:
         cont = 1
         self.meta_matrix_avg = []
 
-        for i in range(len(data)): # Resolver depois para mais 3 estações vizinhas
+        for i in range(len(data)): # Resolver depois para mais 3 estações Neighbors
             sum = 0
             for j in range(index, 15, 3):
                 sum += float(data[i][j])
@@ -123,9 +123,9 @@ class Triangulation:
     def show_map(self):
         m = folium.Map(location=self.tupla_tg)
         folium.Marker(location=self.tupla_tg, popup=Popup('Target', show=True)).add_to(m)
-        folium.Marker(location=self.tupla_cA, popup=Popup('Vizinha A', show=True)).add_to(m)
-        folium.Marker(location=self.tupla_cB, popup=Popup('Vizinha B', show=True)).add_to(m)
-        folium.Marker(location=self.tupla_cC, popup=Popup('Vizinha C', show=True)).add_to(m)
+        folium.Marker(location=self.tupla_cA, popup=Popup('Neighbor A', show=True)).add_to(m)
+        folium.Marker(location=self.tupla_cB, popup=Popup('Neighbor B', show=True)).add_to(m)
+        folium.Marker(location=self.tupla_cC, popup=Popup('Neighbor C', show=True)).add_to(m)
         m.save('map.html')
     
         webbrowser.open_new_tab('map.html')

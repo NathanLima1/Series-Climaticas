@@ -8,10 +8,10 @@ from sklearn import tree
 from sklearn.neural_network import MLPRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.svm import SVR
-from view import View
-from gen_param import generate_param
-from customized_meta_l import customized_meta_learning
-from combine_meta_l import combine_meta_learning
+from meta_learning.view import View
+from meta_learning.gen_param import generate_param
+from meta_learning.customized_meta_l import customized_meta_learning
+from meta_learning.combine_meta_l import combine_meta_learning
 
 fundo = '#4F4F4F' #? Cor de fundo da tela
 fun_b = '#3CB371' #? Cor de fundo dos botoes
