@@ -29,7 +29,7 @@ def idw(self, focus):
         elif focus == 3:
             index = 8
             a = 5
-            data = data_process("Dados comum")
+            data = data_process.load_data_file("Dados comum")
         
         cont2 = 1
 

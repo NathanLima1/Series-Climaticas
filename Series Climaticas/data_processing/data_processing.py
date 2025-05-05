@@ -17,6 +17,7 @@ class DataProcessing:
 
     def find_columns(self, header_line, sample_line):
         # procura_colunas
+        print("Entrou dataP find_columns")
         station = (str(sample_line).split(' '))[2]
         station = station.strip("]").strip("'")
 
@@ -33,6 +34,8 @@ class DataProcessing:
 
     def get_processed_data(self):
         # get_data_trada
+        print("Entrou dataP get_processed_data")
+        print(self.download_path)
         files = [self.target, self.neighborA, self.neighborB, self.neighborC]
         output_files = [
             f"{self.download_path}/target_clean.txt",
@@ -60,7 +63,7 @@ class DataProcessing:
                 reader = csv.reader(f, delimiter=';')
                 for line in reader:
                     temp_data.append(line)
-
+            
             del temp_data[10][-1]
 
             col_prec, col_tmax, col_tmin = self.find_columns(temp_data[10], temp_data[1])
@@ -71,9 +74,14 @@ class DataProcessing:
             selected_columns = [col_prec, col_tmax, col_tmin]
             buffer = []
 
-            for row in temp_data:
-                new_row = [row[0]] + [row[col] for col in selected_columns]
-                buffer.append(new_row)
+            for i in range(len(temp_data)):
+                buffer2 = []
+                buffer2.append(temp_data[i][0])
+                for j in selected_columns:
+                    print(j)
+                    buffer2.append(temp_data[i][j])
+
+                buffer.append(buffer2)
 
             cleaned = []
             for row in buffer:
@@ -172,10 +180,11 @@ class DataProcessing:
 
     def common_data_2(self):
         # dadosc2
-        target, t1 = self.prepare_data(str(self.download) + "/target_clean.txt")
-        neighA, t2 = self.prepare_data(str(self.download) + "/neighborA_clean.txt")
-        neighB, t3 = self.prepare_data(str(self.download) + "/neighborB_clean.txt")
-        neighC, t4 = self.prepare_data(str(self.download) + "/neighborC_clean.txt")
+        target, t1 = self.prepare_common_data(str(self.download_path) + "/target_clean.txt")
+        print(target)
+        neighA, t2 = self.prepare_common_data(str(self.download_path) + "/neighborA_clean.txt")
+        neighB, t3 = self.prepare_common_data(str(self.download_path) + "/neighborB_clean.txt")
+        neighC, t4 = self.prepare_common_data(str(self.download_path) + "/neighborC_clean.txt")
         start = max(target[0][0], neighA[0][0], neighB[0][0], neighC[0][0])
 
         idx1 = idx2 = idx3 = idx4 = 0
@@ -247,10 +256,12 @@ class DataProcessing:
             i = i.split(',')  
             prepared_data.append(i)
 
+        file.close()
         return prepared_data, len(prepared_data)
     
     def load_data_file(self, option):
         # nova retorna_arq
+        print("Entrou dataP load_data_file")
         with open('end.txt') as file:
             paths = [line.strip() for line in file]
 
@@ -284,6 +295,7 @@ class DataProcessing:
 
     def get_year_range(self, option):
         # get_range
+        print("Entrou dataP get_year_range")
         is_common_data = False
 
         with open('end.txt') as file:
@@ -389,7 +401,7 @@ class DataProcessing:
         with open('end.txt') as file:
             paths = [line.strip() for line in file]
 
-        city_files = [self.target_city, self.neighbor_a, self.neighbor_b, self.neighbor_c]
+        city_files = [self.target, self.neighborA, self.neighborB, self.neighborC]
 
         for city_file in city_files:
             temp_data.clear()

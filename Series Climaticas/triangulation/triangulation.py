@@ -142,7 +142,7 @@ class Triangulation:
     def get_rw(self):
         return self.rw_x, self.rw_y, self.rw_avg_y, self.rw_abs_error, self.rw_rel_error, self.meta_matrix_rw
 
-    def generate_mothly_avg(self, foco, cidade):
+    def generate_monthly_avg(self, foco, cidade):
         treatment = DataProcessing()
         
 

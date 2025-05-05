@@ -22,13 +22,13 @@ fun_meta_le = '#191970'
 
 class Principal(Frame):
     def get_info(self, directory):  # Function that opens the folder with .csv files and returns important data
+        print("Entrou Principal get_info")
         raw_data = []
 
         with open(directory, 'r') as file:
             for line in file:
                 text = line.replace('\n', '')
                 raw_data.append(text)
-
         # Remove the last element from the list
         if raw_data:
             del raw_data[-1]
@@ -42,6 +42,7 @@ class Principal(Frame):
         return name, latitude, longitude, altitude, address
 
     def list_cities(self):
+        print("Entrou Principal list_cities")
         db_location = dlg.askdirectory()
 
         file_name_list = os.listdir(db_location)  # The user selects the location where the data is stored
@@ -120,6 +121,7 @@ class Principal(Frame):
 
     def process_selection(self):
         # antiga tratar
+        print("Entrou Principal process_section")
         if (
             self.target_city.get() == ''
             or self.neighbor_a.get() == ''
@@ -174,6 +176,7 @@ class Principal(Frame):
         msg.showinfo(title="Sucesso!", message="Arquivos Selecionados com sucesso!")
 
     def get_col(self):
+        print("Entrou Principal get_col")
         if self.parameter.get() == "Precipitação":
             y_name = "Precipitação (mm)"
             col = 3
@@ -186,6 +189,7 @@ class Principal(Frame):
         return y_name, col
 
     def common_graphs(self):
+        print("Entrou Principal common_graphs")
         data_processor = DataProcessing()
         analyzed_data = data_processor.load_data_file(self.type_data.get())
 
@@ -396,6 +400,7 @@ class Principal(Frame):
         triang.show_map()
 
     def generate_range(self):
+        print("Entrou Principal generate_range")
         teste = DataProcessing()
         self.var_ini = StringVar()
         self.anos = teste.get_year_range(self.type_data.get())
